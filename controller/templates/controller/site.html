@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Событие onfocus</title>
+
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  </head>
+ <body>
+ <style>
+     button{
+   display: list-item;
+   width: 100px;
+   height: 30px;
+  }
+  div.tv
+  {
+    position: absolute;
+    left: 140px;
+    top: 30px;
+  }
+  div.channels
+  {
+    float: left;
+  }
+  div.Channel_name
+  {
+   position: absolute;
+   left: 140px;
+   font-size: large;
+  }
+ </style>
+ <script>
+     $(document).ready(function(){
+         var focus_num=1;
+          $(document).keydown(function(event) {
+            if (event.keyCode == 87) { //s-down
+                focus_num--;
+                if (focus_num==0) { //scroll up
+                    focus_num = 10;
+                }
+                $("#"+focus_num).focus();
+                //alert(focus_num);
+            }
+            if (event.keyCode == 83) { //w-down
+                focus_num++;
+                if (focus_num == 11) { //scroll down
+                    focus_num = 1;
+                }
+                $("#" + focus_num).focus();
+                //alert(focus_num);
+            }
+            if (event.keyCode==13){ //enter-down
+                $("#header").text($("button:focus").text());
+            }
+          })
+
+     })
+ </script>
+   <div  id="header" class="Channel_name">
+     Channel name
+   </div>
+   <div  class="channels">
+   <button class="btn" id="1" autofocus="">1 canal</button>
+   <button class="btn" id="2">2 canal</button>
+   <button class="btn" id="3">3 canal</button>
+   <button class="btn" id="4">4 canal</button>
+   <button class="btn" id="5">5 canal</button>
+   <button class="btn" id="6">6 canal</button>
+   <button class="btn" id="7">7 canal</button>
+   <button class="btn" id="8">8 canal</button>
+   <button class="btn" id="9">9 canal</button>
+   <button class="btn" id="10">10 canal</button>
+   </div>
+   <div  class="tv">
+   <img src="ch.jpg" alt="Channel here" width="480" height="270">
+   </div>
+
+ </body>
+</html>

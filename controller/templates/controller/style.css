@@ -1,0 +1,21 @@
+button{
+   display: list-item;
+   width: 100px;
+   height: 30px;
+  }
+  div.tv
+  {
+    position: absolute;
+    left: 140px;
+    top: 30px;
+  }
+  div.channels
+  {
+    float: left;
+  }
+  div.Channel_name
+  {
+   position: absolute;
+   left: 140px;
+   font-size: large;
+  }
