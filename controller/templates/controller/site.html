@@ -1,79 +1,105 @@
 <!DOCTYPE HTML>
+{% load controller_extras %}
+{% load static %}
+
 <html>
  <head>
   <meta charset="utf-8">
-  <title>Событие onfocus</title>
-
+  <title>tv_remote</title>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+     <link rel="stylesheet" type="text/css" href="../../static/controller/style.css">
   </head>
  <body>
- <style>
-     button{
-   display: list-item;
-   width: 100px;
-   height: 30px;
-  }
-  div.tv
-  {
-    position: absolute;
-    left: 140px;
-    top: 30px;
-  }
-  div.channels
-  {
-    float: left;
-  }
-  div.Channel_name
-  {
-   position: absolute;
-   left: 140px;
-   font-size: large;
-  }
- </style>
  <script>
+     var ch_list=[];
+      {% for item in channel_list %}
+             ch_list.push("{{ item }}");
+      {% endfor %}
+     var src_list=[];
+     {% for item in source_list %}
+             src_list.push("{{ item }}");
+      {% endfor %}
+
+     function set_ch(curr_page,ch_list) {
+         var i=0;
+         var ch_index;
+         for (i;i<10;i++){
+             ch_index=i+curr_page*10;
+
+             if (ch_index<ch_list.length) {
+                 $("#" + i).text((ch_list[ch_index]));
+             }
+             else
+             {
+                 $("#"+i).text("");
+             }
+
+         }
+     }
      $(document).ready(function(){
-         var focus_num=1;
+         var focus_num=0;
+         var curr_page=0;
           $(document).keydown(function(event) {
-            if (event.keyCode == 87) { //s-down
+            if (event.keyCode == 87) { //w
                 focus_num--;
-                if (focus_num==0) { //scroll up
-                    focus_num = 10;
+                if (focus_num==-1) { //scroll up
+                    focus_num = 9;
+                    curr_page--;
+                    if (curr_page<0)
+                    {
+                        curr_page={{ max_page }}-1;
+                        focus_num=ch_list.length%10-1;
+                    }
+                    set_ch(curr_page,ch_list);
                 }
                 $("#"+focus_num).focus();
-                //alert(focus_num);
+
             }
-            if (event.keyCode == 83) { //w-down
+            if (event.keyCode == 83) { //s
                 focus_num++;
-                if (focus_num == 11) { //scroll down
-                    focus_num = 1;
+                if (focus_num == 10) { //scroll down
+                    focus_num = 0;
+                    curr_page++;
+                    if (curr_page>={{ max_page }})
+                    {
+                        curr_page=0;
+                    }
+                    set_ch(curr_page,ch_list);
+
                 }
                 $("#" + focus_num).focus();
-                //alert(focus_num);
+                //alert("");
+
+
             }
             if (event.keyCode==13){ //enter-down
-                $("#header").text($("button:focus").text());
+                if ($("button:focus").text()!=""){
+
+                    $("#header").text($("button:focus").text());
+                    $("#image").attr('src', "../../static/controller/img/"+src_list[focus_num + curr_page * 10])
+                }
             }
           })
 
      })
  </script>
    <div  id="header" class="Channel_name">
-     Channel name
+
    </div>
    <div  class="channels">
-   <button class="btn" id="1" autofocus="">1 canal</button>
-   <button class="btn" id="2">2 canal</button>
-   <button class="btn" id="3">3 canal</button>
-   <button class="btn" id="4">4 canal</button>
-   <button class="btn" id="5">5 canal</button>
-   <button class="btn" id="6">6 canal</button>
-   <button class="btn" id="7">7 canal</button>
-   <button class="btn" id="8">8 canal</button>
-   <button class="btn" id="9">9 canal</button>
-   <button class="btn" id="10">10 canal</button>
+   <button class="btn" id="0" autofocus="">{{ channel_list.0 }}</button>
+   <button class="btn" id="1">{{ channel_list.1 }}</button>
+   <button class="btn" id="2">{{ channel_list.2 }}</button>
+   <button class="btn" id="3">{{ channel_list.3 }}</button>
+   <button class="btn" id="4">{{ channel_list.4 }}</button>
+   <button class="btn" id="5">{{ channel_list.5 }}</button>
+   <button class="btn" id="6">{{ channel_list.6 }}</button>
+   <button class="btn" id="7">{{ channel_list.7 }}</button>
+   <button class="btn" id="8">{{ channel_list.8 }}</button>
+   <button class="btn" id="9">{{ channel_list.9 }}</button>
    </div>
    <div  class="tv">
-   <img src="ch.jpg" alt="Channel here" width="480" height="270">
+   <img src="" id="image" alt="Channel here" width="480" height="270">
    </div>
 
  </body>
