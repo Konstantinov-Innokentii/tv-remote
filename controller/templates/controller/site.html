@@ -1,7 +1,5 @@
 <!DOCTYPE HTML>
-{% load controller_extras %}
 {% load static %}
-
 <html>
  <head>
   <meta charset="utf-8">
@@ -12,14 +10,14 @@
  <body>
  <script>
      var ch_list=[];
-      {% for item in channel_list %}
-             ch_list.push("{{ item }}");
-      {% endfor %}
+     {% for item in channel_list %}
+         ch_list.push("{{ item }}");
+     {% endfor %}
      var src_list=[];
      {% for item in source_list %}
-             src_list.push("{{ item }}");
-      {% endfor %}
-
+         src_list.push("{{ item }}");
+     {% endfor %}
+//refresh channel page
      function set_ch(curr_page,ch_list) {
          var i=0;
          var ch_index;
@@ -33,29 +31,37 @@
              {
                  $("#"+i).text("");
              }
-
          }
      }
      $(document).ready(function(){
          var focus_num=0;
          var curr_page=0;
           $(document).keydown(function(event) {
-            if (event.keyCode == 87) { //w
+            if (event.keyCode == 87 || event.keyCode == 38) { //w
                 focus_num--;
                 if (focus_num==-1) { //scroll up
-                    focus_num = 9;
                     curr_page--;
                     if (curr_page<0)
                     {
                         curr_page={{ max_page }}-1;
-                        focus_num=ch_list.length%10-1;
+
+                        if (ch_list.length%10==0) {
+                            focus_num = 0;
+                        }
+                        else {
+                            focus_num = ch_list.length%10-1;
+                        }
+                    }
+                    else
+                    {
+                        focus_num=9;
                     }
                     set_ch(curr_page,ch_list);
                 }
                 $("#"+focus_num).focus();
 
             }
-            if (event.keyCode == 83) { //s
+            if (event.keyCode == 83 || event.keyCode == 40) { //s
                 focus_num++;
                 if (focus_num == 10) { //scroll down
                     focus_num = 0;
@@ -65,16 +71,17 @@
                         curr_page=0;
                     }
                     set_ch(curr_page,ch_list);
-
+                }
+                if (focus_num==ch_list.length%10 && curr_page=={{ max_page }}-1 && ch_list.length%10!=0)
+                {
+                    set_ch(0,ch_list);
+                    focus_num=0;
+                    curr_page=0;
                 }
                 $("#" + focus_num).focus();
-                //alert("");
-
-
             }
             if (event.keyCode==13){ //enter-down
                 if ($("button:focus").text()!=""){
-
                     $("#header").text($("button:focus").text());
                     $("#image").attr('src', "../../static/controller/img/"+src_list[focus_num + curr_page * 10])
                 }

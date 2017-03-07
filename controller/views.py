@@ -10,4 +10,4 @@ def index(request):
     return render(request, 'controller/site.html',{"channel_list": channel_list,"source_list": source_list,
                                                    "max_page": max_page})
 
-#TODO: check necesisity of channel_quantity
+
